@@ -1,28 +1,17 @@
 {
-  "name": "modern-web-craft",
+  "name": "@craft/gen-ui",
   "version": "1.0.0",
   "private": true,
-  "description": "A production-grade frontend monorepo showcasing advanced UI, performance, and Generative AI patterns.",
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "tools/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "ai:build-context": "ts-node tools/ai-context-builder/src/build-context.ts"
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@craft/ui-system": "*",
+    "ai": "latest",
+    "@ai-sdk/openai": "latest",
+    "react-live": "^4.1.5",
+    "lucide-react": "^0.300.0"
   },
   "devDependencies": {
-    "turbo": "latest",
     "typescript": "^5.0.0",
-    "prettier": "latest"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "@types/react": "^18.2.0"
   }
 }
