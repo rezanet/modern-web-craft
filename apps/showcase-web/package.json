@@ -8,9 +8,10 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "dependencies": {
+"dependencies": {
     "@craft/ui-system": "*",
     "@craft/gen-ui": "*",
+    "@craft/theme-core": "*",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
