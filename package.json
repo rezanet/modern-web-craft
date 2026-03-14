@@ -1,0 +1,28 @@
+{
+  "name": "modern-web-craft",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A production-grade frontend monorepo showcasing advanced UI, performance, and Generative AI patterns.",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "ai:build-context": "ts-node tools/ai-context-builder/src/build-context.ts"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "^5.0.0",
+    "prettier": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
