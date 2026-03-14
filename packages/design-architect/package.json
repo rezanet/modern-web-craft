@@ -1,0 +1,15 @@
+{
+  "name": "@craft/design-architect",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/pipeline.ts",
+  "dependencies": {
+    "ai": "latest",
+    "@ai-sdk/openai": "latest",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
