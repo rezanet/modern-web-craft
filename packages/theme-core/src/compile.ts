@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 
-// 1. Setup paths
-const THEME_JSON_PATH = path.resolve(__dirname, "./theme.json");
-const OUTPUT_CSS_PATH = path.resolve(__dirname, "../tokens.css");
+// 1. Setup paths using process.cwd() to avoid ESM __dirname issues
+const THEME_JSON_PATH = path.resolve(process.cwd(), "src/theme.json");
+const OUTPUT_CSS_PATH = path.resolve(process.cwd(), "tokens.css");
 
 // Helper to convert #RRGGBB to R G B (required for Tailwind opacity support)
 function hexToRgb(hex: string) {
