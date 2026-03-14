@@ -1,0 +1,13 @@
+{
+  "colors": {
+    "background": { "base": "#ffffff", "foreground": "#09090b" },
+    "surface": { "base": "#f4f4f5", "foreground": "#09090b" },
+    "primary": { "base": "#18181b", "foreground": "#fafafa" },
+    "secondary": { "base": "#e4e4e7", "foreground": "#18181b" },
+    "muted": { "base": "#f4f4f5", "foreground": "#71717a" }
+  },
+  "radii": {
+    "button": "0.5rem",
+    "card": "1rem"
+  }
+}
