@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import { LiveProvider, LiveError, LivePreview } from "react-live";
 
 // 1. Import OUR exact design system components
