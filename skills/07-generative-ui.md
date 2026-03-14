@@ -1,29 +1,14 @@
-# Skill: Generative UI & AI Frontend Architecture
+# Skill: Generative UI & AI Context Engineering
 
-**Description:** The ability to integrate Large Language Models (LLMs) into the frontend workflow to generate context-aware, on-brand, and accessible user interfaces. This skill moves beyond basic prompt engineering to focus on programmatic context-injection, structured outputs, and Generative UI patterns.
-
----
+**Description:** The integration of Large Language Models (LLMs) into the frontend workflow. This bridges the gap between AI generation and rigid design systems, ensuring outputs are on-brand, accessible, and output as interactive code rather than static text.
 
 ## 1. Core Competencies
 
-### Advanced Prompt Architecture for Code
-* **System Context Compilation:** Programmatically generating system prompts by reading ASTs (Abstract Syntax Trees) or documentation from local design systems.
-* **Few-Shot Prompting for UI:** Guiding LLMs with strict, high-quality code examples to enforce accessibility (WCAG) and brand guidelines.
-* **Structured Outputs:** Forcing LLMs to return strict JSON matching Zod schemas to guarantee predictable rendering of UI components.
+* **Context Compilation (RAG for UI):** Programmatically reading the codebase's Abstract Syntax Trees (AST) to feed the LLM exact component schemas and props before it generates code.
+* **Structured UI Output:** Forcing the LLM to return strictly typed JSON (using Zod) that maps directly to frontend component rendering.
+* **AI UI Streaming:** Using tool-calling and stream processing to render UI components on the client as the AI thinks, creating a seamless user experience.
+* **Guardrailing:** Implementing fallback UI states (Skeletons/Error Boundaries) to handle LLM latency, timeouts, or malformed JSON responses.
 
-### Generative UI Implementation
-* **UI Streaming:** Using tools like Vercel AI SDK to stream React Server Components (RSC) directly to the client instead of plain text.
-* **Tool Calling (Function Calling):** Granting the AI the ability to trigger local frontend state changes or fetch external APIs (e.g., pulling live CMS data into an AI-generated layout).
-* **Fallback UI:** Architecting loading skeletons and error boundaries specifically for AI latency and generation failures.
-
-### Design-to-Code Automation
-* **Figma to LLM Pipelines:** Exporting Figma variables/JSON and injecting them into the AI's context window so it understands the brand's exact spacing, colors, and typography.
-* **Guardrailing Output:** Writing post-generation parsers that lint the AI's output with ESLint and Stylelint to ensure it meets production standards before rendering.
-
----
-
-## 2. Tooling Ecosystem
-
-* **AI SDKs:** Vercel AI SDK, LangChain.js, OpenAI Node SDK, Anthropic SDK.
-* **Validation:** Zod (for validating AI JSON outputs).
-* **Parsing:** AST parsers (to read local codebase structure).
+## 2. Repo Implementation (`packages/gen-ui` & `tools/ai-context-builder`)
+* `ai-context-builder` runs on a pre-commit hook, updating a `system-prompt.txt` file with the latest definitions of our `@craft/ui-system`.
+* `gen-ui` contains a `<ChatRenderer />` component that parses the LLM's structured output and dynamically renders the correct internal React components.
