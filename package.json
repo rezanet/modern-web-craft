@@ -17,14 +17,14 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "ai:build-context": "ts-node tools/ai-context-builder/src/build-context.ts"
   },
-"devDependencies": {
+  "devDependencies": {
     "ts-node": "^10.9.2",
     "ts-morph": "^21.0.1",
     "@types/node": "^20.0.0",
     "turbo": "latest",
     "typescript": "^5.0.0",
     "prettier": "latest"
-  }
+  },
   "engines": {
     "node": ">=18.0.0"
   }
