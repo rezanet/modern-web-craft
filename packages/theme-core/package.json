@@ -1,0 +1,14 @@
+{
+  "name": "@craft/theme-core",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/theme.json",
+  "scripts": {
+    "build": "ts-node src/compile.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
