@@ -12,6 +12,8 @@
     "@craft/ui-system": "*",
     "@craft/gen-ui": "*",
     "@craft/theme-core": "*",
+    "ai": "latest",
+    "react-live": "^4.1.5",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
