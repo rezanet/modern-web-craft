@@ -6,16 +6,15 @@ import { useChat } from "ai/react";
 import { LiveProvider, LiveError, LivePreview } from "react-live";
 
 // 1. Import OUR exact design system components
-import { Button, Card, Badge, TextInput } from "@craft/ui-system";
+import { Button } from "@craft/ui-system";
+// TODO: import { Card, Badge, TextInput } from "@craft/ui-system";
 import { Loader2 } from "lucide-react";
 
 // 2. Define the exact sandbox scope the AI is allowed to use
 const uiScope = {
   React,
   Button,
-  Card,
-  Badge,
-  TextInput,
+  // Card, Badge, TextInput
 };
 
 export function GenerativeUIRenderer() {
