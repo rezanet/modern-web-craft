@@ -1,34 +1,23 @@
-import { Button } from "@craft/ui-system";
-import { Sparkles } from "lucide-react";
+import { GenerativeUIRenderer } from "@craft/gen-ui";
 
-export default function Home() {
+export default function GenerativeUIPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-8">
-      
-      <div className="text-center space-y-4">
-        <h1 className="text-5xl font-bold tracking-tight">Modern Web Craft</h1>
-        <p className="text-muted-foreground text-lg max-w-md mx-auto">
-          A production-grade monorepo showcasing advanced frontend architecture and generative UI.
-        </p>
-      </div>
-
-      <div className="flex items-center gap-4 border p-8 rounded-xl shadow-sm bg-gray-50/50">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-            @craft/ui-system
-          </h2>
-          <div className="flex gap-4">
-            {/* Using our local package! */}
-            <Button variant="default">Primary Action</Button>
-            <Button variant="outline">Secondary</Button>
-            <Button variant="ghost">
-              <Sparkles className="w-4 h-4 mr-2" />
-              AI Magic
-            </Button>
-          </div>
+    <main className="min-h-screen bg-white py-24">
+      <div className="max-w-4xl mx-auto px-6 space-y-8">
+        
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            Generative UI Sandbox
+          </h1>
+          <p className="text-lg text-gray-500">
+            Ask the AI to build a component. It will strictly use the <code className="bg-gray-100 px-1 rounded">@craft/ui-system</code> definitions compiled in the AST context builder.
+          </p>
         </div>
-      </div>
 
+        {/* Drop in our pre-built magic component */}
+        <GenerativeUIRenderer />
+
+      </div>
     </main>
   );
 }
