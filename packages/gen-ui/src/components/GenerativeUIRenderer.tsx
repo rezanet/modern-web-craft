@@ -1,26 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useChat } from "@ai-sdk/react";
 import { LiveProvider, LiveError, LivePreview } from "react-live";
 
 // 1. Import OUR exact design system components
-import { Button } from "@craft/ui-system";
-// TODO: import { Card, Badge, TextInput } from "@craft/ui-system";
+import { Button, Card, TextInput } from "@craft/ui-system";
 import { Loader2 } from "lucide-react";
 
 // 2. Define the exact sandbox scope the AI is allowed to use
 const uiScope = {
   React,
   Button,
-  // Card,
-  // Badge,
-  // TextInput,
+  Card,
+  TextInput,
 };
 
 export function GenerativeUIRenderer() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: "/api/generate-ui", // This calls our server action above
+    api: "/api/generate-ui",
   });
 
   return (
@@ -28,9 +26,9 @@ export function GenerativeUIRenderer() {
       
       {/* 3. The Chat UI */}
       <form onSubmit={handleSubmit} className="flex gap-4">
-        {/* Replaced TextInput with a standard HTML input for now */}
-        <input 
-          className="flex-1 border rounded-md px-3 py-2"
+        {/* Using our newly built TextInput! */}
+        <TextInput 
+          className="flex-1"
           value={input} 
           onChange={handleInputChange} 
           placeholder="e.g., Build me a pricing card with a solid primary button..." 
@@ -44,19 +42,13 @@ export function GenerativeUIRenderer() {
           message.role === "assistant" && (
             <div key={message.id} className="mt-4">
               
-              {/* Here is the magic. We pass the AI's string into the LiveProvider */}
               <LiveProvider code={message.content} scope={uiScope}>
-                
-                {/* LivePreview renders the actual components visually! */}
                 <div className="p-6 bg-white rounded-lg shadow-sm">
                   <LivePreview />
                 </div>
-
-                {/* If the AI hallucinates a prop, it safely catches the error here */}
                 <div className="text-red-500 text-sm mt-2 font-mono">
                   <LiveError />
                 </div>
-
               </LiveProvider>
 
             </div>
