@@ -13,6 +13,7 @@
     "@craft/gen-ui": "*",
     "@craft/theme-core": "*",
     "ai": "latest",
+    "@ai-sdk/react": "latest",
     "react-live": "^4.1.5",
     "next": "latest",
     "react": "^18.2.0",
