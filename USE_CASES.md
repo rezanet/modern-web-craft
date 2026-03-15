@@ -1,23 +1,25 @@
-# Use Cases & User Stories
+# Agency Operations: Use Cases & User Stories
 
-This document defines the operational workflow of the AI Agency. It dictates how the human client interacts with the system and how the agents collaborate to produce artifacts.
+This document defines how the human client interacts with the Agency and how the AI agents interact with each other.
 
-## Epic 1: Strategy & Discovery (The Orchestrator)
-**Goal:** Extract undeniable business logic from the client to eliminate LLM guesswork.
+## Epic 1: Scoping & Requirements (Product Department)
+**Goal:** Define exactly what is being built before any creative work begins.
+* **UC 1.1 (The Client Interview):** As a Business Analyst Agent, I will ask the client targeted questions to extract the core problem, user personas, and required features.
+* **UC 1.2 (Scope Generation):** As the BA Agent, I will generate a strict Functional Requirements Document (FRD).
+* **UC 1.3 (Technical Architecture):** As the CTO Agent, I will read the FRD and generate a data schema and technical constraints document (e.g., "Requires a PostgreSQL database and Stripe integration").
 
-* **UC 1.1: The Briefing:** As a client, I want to describe my business in plain text so the Orchestrator can formulate a structured strategy.
-* **UC 1.2: The Pushback:** As the Orchestrator, if the client's prompt is too vague (e.g., "Build a shoe store"), I must push back and ask for target demographics, price point, and brand vibe.
-* **UC 1.3: Strategy Lock:** As the Orchestrator, I must output a strict `StrategyBrief` JSON object that locks in the tone of voice, forbidden words, and brand archetype.
+## Epic 2: Brand & Design (Creative Department)
+**Goal:** Establish a unique, non-generic aesthetic.
+* **UC 2.1 (Brand Identity):** As the Brand Strategist, I will define the Tone of Voice, Brand Archetype, and emotional goals based on the BA's target audience.
+* **UC 2.2 (Design Tokens):** As the Brand Architect, I will generate a WCAG-compliant color palette and modular typography scale.
+* **UC 2.3 (Creative Director Review):** As the Creative Director Agent, I will review the Architect's colors against the Brand Identity. (e.g., If the brand is "Playful/Kids" but the Architect chose "Corporate Navy", I will reject it and force a revision).
 
-## Epic 2: Design Architecture (The Architect)
-**Goal:** Create a mathematically sound, accessible design system based on the Strategy.
+## Epic 3: Content & Marketing (Marketing Department)
+**Goal:** Generate compelling, SEO-driven text.
+* **UC 3.1 (Marketing Strategy):** As the Marketing Director, I will define the core content pillars and SEO keywords.
+* **UC 3.2 (Copywriting):** As the Copywriter Agent, I will write the website copy, adhering strictly to the Strategist's Tone of Voice and the Marketing Director's SEO keywords.
 
-* **UC 2.1: Color Mathematics:** As the Architect, I will ingest the Strategy and output a semantic color palette (Primary, Secondary, Muted, Destructive). I must ensure WCAG AA contrast for all text/background pairings.
-* **UC 2.2: Typography Rhythm:** As the Architect, I will select Google Fonts that match the brand archetype and lock them into a strict modular scale (`rem` based) to prevent layout shifting.
-* **UC 2.3: Omnichannel Tokens:** As the Architect, the `BrandBlueprint.json` I create must be platform-agnostic, meaning it can be consumed by the web app, a PDF generator, or a social media image generator.
-
-## Epic 3: Artifact Generation (The Builder)
-**Goal:** Generate polished artifacts that strictly inherit the Architect's rules.
-
-* **UC 3.1: UI Generation:** As the Builder, I will generate React interfaces using *only* the internal component library, ensuring pixel-perfect alignment with the Architect's CSS tokens.
-* **UC 3.2: Copywriting (Future):** As the Copywriter Agent, I will ingest the `StrategyBrief` and write marketing copy that strictly avoids the "forbidden words" and matches the defined tone of voice.
+## Epic 4: Production & QA (Engineering Department)
+**Goal:** Generate polished, accessible React code.
+* **UC 4.1 (UI Generation):** As the Builder Agent, I will write React components that fulfill the BA's functional requirements, utilize the Architect's design tokens, and populate with the Copywriter's text.
+* **UC 4.2 (Accessibility Audit):** As the QA Agent, I will parse the Builder's code to ensure it contains proper ARIA labels, semantic HTML, and responsive Tailwind classes, rejecting the code if it fails.
