@@ -1,33 +1,17 @@
-# 🚀 Modern Web Craft: The Deterministic AI Agency
+# 🚀 Modern Web Craft: The Autonomous Digital Agency
 
-This is not a standard web application. It is a **Production-Grade Monorepo** designed to act as an autonomous Digital Agency. It solves the "Generic AI Aesthetic" problem by wrapping Large Language Models in strict software engineering guardrails.
+This is a **Production-Grade Monorepo** designed to act as an autonomous, self-correcting Digital Agency. It solves the "Generic AI Aesthetic" and "Hallucination" problems by wrapping Large Language Models in strict software engineering guardrails and multi-agent peer review.
 
-By utilizing Zod validation, Prompt Chaining, and AST context parsing, this repository forces any LLM (OpenAI, Claude, Gemini) to output highly polished, brand-consistent, and WCAG-accessible artifacts every single time.
+By utilizing Zod validation, Shared State Memory, and an **Actor/Critic (Maker/Checker) AI Architecture**, this repository forces LLMs to output highly polished, brand-consistent, and functionally complete enterprise artifacts.
 
-## 🌟 The 3-Agent Pipeline
-1. **The Orchestrator:** Interviews the client and locks in the Business Strategy JSON.
-2. **The Architect:** Translates the Strategy into mathematically perfect Design Tokens (CSS/JSON).
-3. **The Builder:** Generates production React UI and marketing copy constrained strictly by the Architect's design system.
+## 🌟 The Agency Departments
+1. **Strategy & Product:** Business Analysts and CTOs define the scope, technical requirements, and target audience.
+2. **Creative & Brand:** Brand Strategists and Architects define the emotional resonance, tone of voice, and mathematical design tokens (WCAG-compliant colors, typography).
+3. **Marketing & Copy:** Marketing Directors and Copywriters generate SEO-optimized, tone-compliant content strategies and text.
+4. **Engineering & QA:** UI Builders and QA Auditors generate interactive React components and verify them against strict accessibility standards.
 
-## 🚀 Getting Started
-1. Install dependencies: `npm install`
-2. Compile the Context: `npm run ai:build-context`
-3. Start the Agency: `npm run dev`
-
-*See [ARCHITECTURE.md](./ARCHITECTURE.md) for system design and [ROADMAP.md](./ROADMAP.md) for upcoming features.*# 🚀 Modern Web Craft: The Deterministic AI Agency
-
-This is not a standard web application. It is a **Production-Grade Monorepo** designed to act as an autonomous Digital Agency. It solves the "Generic AI Aesthetic" problem by wrapping Large Language Models in strict software engineering guardrails.
-
-By utilizing Zod validation, Prompt Chaining, and AST context parsing, this repository forces any LLM (OpenAI, Claude, Gemini) to output highly polished, brand-consistent, and WCAG-accessible artifacts every single time.
-
-## 🌟 The 3-Agent Pipeline
-1. **The Orchestrator:** Interviews the client and locks in the Business Strategy JSON.
-2. **The Architect:** Translates the Strategy into mathematically perfect Design Tokens (CSS/JSON).
-3. **The Builder:** Generates production React UI and marketing copy constrained strictly by the Architect's design system.
+## 🛡️ The "Maker/Checker" Guarantee
+No artifact moves to the next phase without approval. A "Maker" agent generates the artifact (e.g., a Design System), and a "Checker" agent (The Creative Director) critiques it against the client's original brief. If it fails, the Maker must revise it.
 
 ## 🚀 Getting Started
-1. Install dependencies: `npm install`
-2. Compile the Context: `npm run ai:build-context`
-3. Start the Agency: `npm run dev`
-
-*See [ARCHITECTURE.md](./ARCHITECTURE.md) for system design and [ROADMAP.md](./ROADMAP.md) for upcoming features.*
+*See [ARCHITECTURE.md](./ARCHITECTURE.md) for system design, [USE_CASES.md](./USE_CASES.md) for agency operations, and [ROADMAP.md](./ROADMAP.md) for our rollout plan.*
