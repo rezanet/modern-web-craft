@@ -1,9 +1,10 @@
 import { generateObject, LanguageModel } from "ai";
 import { z } from "zod";
+import { loadGlobalMemory, addGlobalLesson } from "./storage";
 
 export interface MakerCheckerParams<T> {
   model: LanguageModel;           // e.g., openai("gpt-4o")
-  schema: z.ZodType<T>;           // The Zod schema we want the Maker to build (e.g., FunctionalScopeSchema)
+  schema: z.ZodType<T>;           // The Zod schema we want the Maker to build
   makerSystem: string;            // The Maker's skill.md contents
   checkerSystem: string;          // The Checker's skill.md contents
   taskPrompt: string;             // The client's raw request
@@ -22,6 +23,15 @@ export async function runMakerCheckerLoop<T>({
   let currentDraft: T | null = null;
   let feedback = "";
 
+  // --- MEMORY INJECTION ---
+  // Load the global agency memory and inject it into the Maker's brain so it doesn't repeat past mistakes.
+  const globalMemory = loadGlobalMemory();
+  const lessonsText = globalMemory.lessonsLearned.length > 0 
+    ? `\n\n--- AGENCY PLAYBOOK (LEARN FROM PAST MISTAKES) ---\n${globalMemory.lessonsLearned.map(l => `- ${l}`).join("\n")}\nEnsure you do not repeat these past mistakes in your output.`
+    : "";
+  
+  const enrichedMakerSystem = makerSystem + lessonsText;
+
   // The strict mathematical schema for the Checker's response
   const CheckerSchema = z.object({
     approved: z.boolean().describe("True ONLY if the draft perfectly meets all guidelines and the client request. False if it needs ANY changes."),
@@ -39,7 +49,7 @@ export async function runMakerCheckerLoop<T>({
     const { object: draft } = await generateObject({
       model,
       schema,
-      system: makerSystem,
+      system: enrichedMakerSystem, // Using the brain enriched with global memory!
       prompt: makerPrompt,
     });
 
@@ -62,7 +72,12 @@ export async function runMakerCheckerLoop<T>({
       return currentDraft;
     } else {
       console.log(`❌ Checker REJECTED the draft. Critiques:`);
-      review.critiques.forEach(c => console.log(`  - ${c}`));
+      review.critiques.forEach(c => {
+        console.log(`  - ${c}`);
+        // --- MEMORY CAPTURE ---
+        // Save this critique to the Global Memory so the agency gets smarter forever!
+        addGlobalLesson(c);
+      });
       
       // Store the feedback and loop again
       feedback = review.critiques.join("\n");
