@@ -33,19 +33,36 @@ export const DesignSystemSchema = z.object({
 });
 
 // ---------------------------------------------------------
-// 3. MARKETING DEPARTMENT (Marketing Director & Copywriter)
+// 3. MASSIVE MARKETING ENGINE (5 Parallel Agents)
 // ---------------------------------------------------------
-export const MarketingPlanSchema = z.object({
-  seoKeywords: z.array(z.string()).describe("Primary keywords to target for organic growth."),
-  contentPillars: z.array(z.string()).describe("The core topics the brand will talk about online."),
-  primaryChannels: z.array(z.string()).describe("The best social media platforms for this specific audience."),
+export const MarketStrategySchema = z.object({
+  positioningStatement: z.string().describe("A 1-2 sentence core market positioning statement."),
+  pricingModel: z.string().describe("The high-level pricing strategy (e.g., Freemium, Enterprise Sales, Tiered SaaS)."),
+  growthLevers: z.array(z.string()).describe("Top 3 areas to leverage for rapid user acquisition."),
 });
 
-export const CopywritingSchema = z.object({
-  headline: z.string().describe("A catchy, high-converting H1 hero headline (max 10 words)."),
-  subheadline: z.string().describe("A supporting H2 subheadline that explains the value proposition."),
-  callToAction: z.string().describe("The primary button text (e.g., 'Start Free Trial')."),
-  socialCaption: z.string().describe("A sample social media caption optimized for the primary channel."),
+export const MarketCompetitiveSchema = z.object({
+  directCompetitors: z.array(z.string()).describe("Top 3 direct market competitors."),
+  competitiveAdvantage: z.string().describe("The unfair advantage or unique selling proposition (USP)."),
+  marketGaps: z.array(z.string()).describe("Weaknesses in competitors that this product will exploit."),
+});
+
+export const MarketTechnicalSchema = z.object({
+  seoArchitecture: z.string().describe("Core technical SEO strategy (e.g., Programmatic SEO, SSR content hubs)."),
+  analyticsStack: z.array(z.string()).describe("Recommended tracking and analytics tools."),
+  keyConversionEvents: z.array(z.string()).describe("The critical user actions to track in the funnel."),
+});
+
+export const MarketContentSchema = z.object({
+  contentPillars: z.array(z.string()).describe("The 3-4 main topics the brand will consistently publish about."),
+  primaryChannels: z.array(z.string()).describe("The absolute best distribution channels for this specific audience."),
+  heroCopy: z.string().describe("A high-converting H1 headline for the landing page."),
+});
+
+export const MarketConversionSchema = z.object({
+  funnelStages: z.array(z.string()).describe("The exact steps from awareness to conversion."),
+  leadMagnet: z.string().describe("The proposed high-value free offer to capture emails."),
+  croHypotheses: z.array(z.string()).describe("A/B testing ideas to improve initial conversion rates."),
 });
 
 // ---------------------------------------------------------
@@ -53,23 +70,34 @@ export const CopywritingSchema = z.object({
 // ---------------------------------------------------------
 export const ProjectStateSchema = z.object({
   status: z.enum([
-    "idle", 
-    "scoping", 
-    "branding", 
-    "designing", 
-    "marketing", 
-    "production", 
+    "idle",
+    "scoping",
+    "branding",
+    "designing",
+    "marketing-engine", // Updated phase to represent the parallel execution
+    "production",
     "completed"
   ]).default("idle"),
-  
+
+  // Existing Departments
   scope: FunctionalScopeSchema.nullable().default(null),
   tech: TechnicalSpecSchema.nullable().default(null),
   brand: BrandIdentitySchema.nullable().default(null),
   design: DesignSystemSchema.nullable().default(null),
-  marketing: MarketingPlanSchema.nullable().default(null),
-  copy: CopywritingSchema.nullable().default(null),
+
+  // The 5-Agent Marketing Engine Slices
+  marketStrategy: MarketStrategySchema.nullable().default(null),
+  marketCompetitive: MarketCompetitiveSchema.nullable().default(null),
+  marketTechnical: MarketTechnicalSchema.nullable().default(null),
+  marketContent: MarketContentSchema.nullable().default(null),
+  marketConversion: MarketConversionSchema.nullable().default(null),
 });
 
 export type ProjectState = z.infer<typeof ProjectStateSchema>;
 export type FunctionalScope = z.infer<typeof FunctionalScopeSchema>;
 export type BrandIdentity = z.infer<typeof BrandIdentitySchema>;
+export type MarketStrategy = z.infer<typeof MarketStrategySchema>;
+export type MarketCompetitive = z.infer<typeof MarketCompetitiveSchema>;
+export type MarketTechnical = z.infer<typeof MarketTechnicalSchema>;
+export type MarketContent = z.infer<typeof MarketContentSchema>;
+export type MarketConversion = z.infer<typeof MarketConversionSchema>;
