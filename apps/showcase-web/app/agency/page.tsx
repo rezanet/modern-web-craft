@@ -17,7 +17,6 @@ export default function AgencyPortalPage() {
     }
 
     setIsLoading(true);
-    setResult(null);
 
     try {
       const res = await fetch("/api/agency", {
@@ -35,6 +34,17 @@ export default function AgencyPortalPage() {
     }
   };
 
+  const getButtonText = () => {
+    if (isLoading) return "Agents Working (Check Terminal Logs)...";
+    if (result && result.data) {
+      if (!result.data.scope) return "1. Run Business Scoping";
+      if (!result.data.tech) return "2. Run Technical Architecture";
+      if (!result.data.brand) return "3. Run Brand Strategy";
+      return "Pipeline Complete (For Now)";
+    }
+    return "Start Agency Pipeline";
+  };
+
   return (
     <main className="min-h-screen bg-gray-50 py-24">
       <div className="max-w-4xl mx-auto px-6 space-y-8">
@@ -44,7 +54,7 @@ export default function AgencyPortalPage() {
             Agency Client Portal (War Room)
           </h1>
           <p className="text-lg text-gray-500">
-            Create a unique Project ID to isolate your client's data. If the project already exists, entering the same ID will resume their session.
+            The agency works in phases. Hitting the button below will trigger the next missing phase in the project state.
           </p>
         </div>
 
@@ -72,8 +82,12 @@ export default function AgencyPortalPage() {
             </div>
             
             <Button type="submit" isLoading={isLoading} className="w-full">
-              {isLoading ? "Agents Working (Check Terminal Logs)..." : "Start / Resume Scoping"}
+              {getButtonText()}
             </Button>
+
+            {result?.message && (
+              <p className="text-sm text-center text-green-600 font-medium">{result.message}</p>
+            )}
           </form>
         </Card>
 
@@ -83,9 +97,6 @@ export default function AgencyPortalPage() {
               <h3 className="text-lg font-semibold text-white">
                 Project State: <span className="text-blue-400">{projectId}</span>
               </h3>
-              <span className="text-xs bg-blue-900 text-blue-300 px-2 py-1 rounded-full uppercase tracking-wider font-bold">
-                Status: {result.data.status}
-              </span>
             </div>
             <pre className="text-sm p-4 overflow-x-auto text-green-400 font-mono">
               {JSON.stringify(result.data, null, 2)}
