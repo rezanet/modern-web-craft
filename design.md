@@ -301,4 +301,4 @@ Why: Avoids leaking orchestration details into the UI app. Keeps coupling low.
 
 ## Final Note (architectural warning)
 
-If you allow “forced approval” anywhere in the pipeline, you do not have an agency with guardrails — you have a text generator with extra steps. Remove that escape hatch early, and the rest of the design becomes much easier to reason about. [1](https://ampgroup-my.sharepoint.com/personal/reza_negarestani_amp_com_au/Documents/Microsoft%20Copilot%20Chat%20Files/02-product-owner.md)[2](https://ampgroup-my.sharepoint.com/personal/reza_negarestani_amp_com_au/Documents/Microsoft%20Copilot%20Chat%20Files/02-design-to-code.md)
+If you allow “forced approval” anywhere in the pipeline, you do not have an agency with guardrails — you have a text generator with extra steps. Remove that escape hatch early, and the rest of the design becomes much easier to reason about. 
