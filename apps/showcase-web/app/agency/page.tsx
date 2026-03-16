@@ -40,6 +40,8 @@ export default function AgencyPortalPage() {
       if (!result.data.scope) return "1. Run Business Scoping";
       if (!result.data.tech) return "2. Run Technical Architecture";
       if (!result.data.brand) return "3. Run Brand Strategy";
+      if (!result.data.marketing) return "4. Run Marketing Strategy";
+      if (!result.data.copy) return "5. Run Copywriting";
       return "Pipeline Complete (For Now)";
     }
     return "Start Agency Pipeline";
