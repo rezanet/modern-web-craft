@@ -13,11 +13,11 @@
 ## Phase 3: The Creative Department (Brand & Design)
 * [x] Build the Brand Strategist Agent (Tone, Archetype).
 * [x] Implement the Creative Director Agent to govern the Maker/Checker loop for design.
-* [ ] Upgrade the Brand Architect Agent (Colors, Typography).
+* [x] Upgrade the Brand Architect Agent (Colors, Typography).
 
 ## Phase 4: The Marketing Department (Content)
-* [ ] Build the Marketing Director Agent (SEO, Channels).
-* [ ] Build the Copywriter Agent (Web copy, Social captions).
+* [x] Build the Marketing Director Agent (SEO, Channels).
+* [x] Build the Copywriter Agent (Web copy, Social captions).
 
 ## Phase 5: The Engineering Department (Production)
 * [ ] Upgrade the Builder Agent to pull from the new `ProjectState`.
