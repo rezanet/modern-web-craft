@@ -2,40 +2,71 @@ import { openai } from "@ai-sdk/openai";
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
-import { runMakerCheckerLoop, FunctionalScopeSchema } from "@craft/agency-core";
+import { 
+  runMakerCheckerLoop, 
+  FunctionalScopeSchema,
+  loadProjectState,
+  saveProjectState,
+  ProjectState
+} from "@craft/agency-core";
 
 export async function POST(req: Request) {
   try {
-    const { prompt } = await req.json();
+    const { projectId, prompt } = await req.json();
 
-    if (!prompt) {
-      return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+    if (!projectId || !prompt) {
+      return NextResponse.json({ error: "Project ID and prompt are required" }, { status: 400 });
     }
 
-    console.log("🚀 Starting Agency Pipeline for prompt:", prompt);
+    console.log(`🚀 Starting Agency Pipeline for project: ${projectId}`);
 
-    // 1. Load the Agent Brains (System Prompts)
-    // Next.js runs with process.cwd() at apps/showcase-web, so we go up two levels to the root
+    // 1. Load the existing project state, or initialize a new one
+    let state: ProjectState = loadProjectState(projectId) || {
+      status: "idle",
+      scope: null,
+      tech: null,
+      brand: null,
+      design: null,
+      marketing: null,
+    };
+
+    // 2. Load the Agent Brains (System Prompts)
     const baPath = path.resolve(process.cwd(), "../../skills/agents/01-business-analyst.md");
     const poPath = path.resolve(process.cwd(), "../../skills/agents/02-product-owner.md");
 
     const baSystem = fs.readFileSync(baPath, "utf-8");
     const poSystem = fs.readFileSync(poPath, "utf-8");
 
-    // 2. Run the Maker/Checker Loop
-    const result = await runMakerCheckerLoop({
-      model: openai("gpt-4o"), // Uses your OPENAI_API_KEY from .env.local
-      schema: FunctionalScopeSchema,
-      makerSystem: baSystem,
-      checkerSystem: poSystem,
-      taskPrompt: prompt,
-      maxIterations: 3, // Prevents infinite loops and saves API costs
+    // 3. Phase 1: Scoping
+    // We only run the scoping agents if the project is brand new or actively being scoped
+    if (state.status === "idle" || state.status === "scoping") {
+      state.status = "scoping";
+      saveProjectState(projectId, state); // Lock in the status change
+
+      const result = await runMakerCheckerLoop({
+        model: openai("gpt-4o"),
+        schema: FunctionalScopeSchema,
+        makerSystem: baSystem,
+        checkerSystem: poSystem,
+        taskPrompt: prompt,
+        maxIterations: 3, 
+      });
+
+      // Update the state with the finalized, approved scope
+      state.scope = result;
+      state.status = "branding"; // Successfully move the project to the next department!
+      saveProjectState(projectId, state);
+
+      console.log(`🏁 Scoping Complete. Project [${projectId}] saved to memory.`);
+      return NextResponse.json({ success: true, data: state });
+    }
+
+    // If the project is past the scoping phase, we return the state as-is for now
+    return NextResponse.json({ 
+      success: true, 
+      data: state, 
+      message: "Project is already past the scoping phase." 
     });
-
-    console.log("🏁 Pipeline Complete. Outputting finalized scope.");
-
-    // 3. Return the validated JSON to the frontend
-    return NextResponse.json({ success: true, data: result });
 
   } catch (error: any) {
     console.error("Agency API Error:", error);
