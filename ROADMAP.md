@@ -1,19 +1,19 @@
 # Development Roadmap
 
 ## Phase 1: Agency Core & The "War Room"
-* [ ] Initialize `@craft/agency-core` package.
-* [ ] Define the global `ProjectState` interface (the shared memory graph).
-* [ ] Build the underlying "Maker/Checker" utility function to handle AI peer reviews.
-* [ ] Create the Next.js "Client Portal" to visualize the `ProjectState` as it builds.
+* [x] Initialize `@craft/agency-core` package.
+* [x] Define the global `ProjectState` interface (the shared memory graph).
+* [x] Build the underlying "Maker/Checker" utility function to handle AI peer reviews.
+* [x] Create the Next.js "Client Portal" to visualize the `ProjectState` as it builds.
 
 ## Phase 2: The Product Department (Scoping)
-* [ ] Build the Business Analyst Agent and its Zod schemas (Functional Requirements).
-* [ ] Build the CTO Agent and its Zod schemas (Technical Requirements & Data Models).
+* [x] Build the Business Analyst Agent and its Zod schemas (Functional Requirements).
+* [x] Build the CTO Agent and its Zod schemas (Technical Requirements & Data Models).
 
 ## Phase 3: The Creative Department (Brand & Design)
-* [ ] Build the Brand Strategist Agent (Tone, Archetype).
+* [x] Build the Brand Strategist Agent (Tone, Archetype).
+* [x] Implement the Creative Director Agent to govern the Maker/Checker loop for design.
 * [ ] Upgrade the Brand Architect Agent (Colors, Typography).
-* [ ] Implement the Creative Director Agent to govern the Maker/Checker loop for design.
 
 ## Phase 4: The Marketing Department (Content)
 * [ ] Build the Marketing Director Agent (SEO, Channels).
