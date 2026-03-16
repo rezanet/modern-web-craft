@@ -1,5 +1,6 @@
 import { generateObject, LanguageModel } from "ai";
 import { z } from "zod";
+import { loadGlobalMemory, addGlobalLesson } from "./storage";
 
 /**
  * A strict Maker/Checker loop that:
@@ -8,7 +9,7 @@ import { z } from "zod";
  * - Iterates until approved or maxIterations reached
  *
  * IMPORTANT: This function never "forces approval".
- * It either returns approved output, or returns a non-approved result (or throws, depending on options).
+ * It either returns approved output, or returns a non-approved result (or throws).
  */
 
 export type CheckerReview = {
@@ -33,34 +34,13 @@ export type MakerCheckerResult<T> = {
 };
 
 export interface MakerCheckerParams<T> {
-  /** e.g. openai("gpt-4o") */
   model: LanguageModel;
-
-  /** The schema we want the Maker to build (e.g., FunctionalScopeSchema) */
   schema: z.ZodType<T>;
-
-  /** Maker's system prompt contents (typically the skill.md contents) */
   makerSystem: string;
-
-  /** Checker's system prompt contents (typically the skill.md contents) */
   checkerSystem: string;
-
-  /** The client's raw request (or a structured task prompt) */
   taskPrompt: string;
-
-  /** Safety fallback to prevent infinite loops (default: 3) */
   maxIterations?: number;
-
-  /**
-   * If true, throw an error when not approved after maxIterations.
-   * If false (default), return approved=false with trace & lastReview.
-   */
   throwOnMaxIterations?: boolean;
-
-  /**
-   * Optional event hook for UI/telemetry.
-   * You can wire this into apps/showcase-web later.
-   */
   onEvent?: (event: {
     type:
       | "maker:start"
@@ -74,11 +54,6 @@ export interface MakerCheckerParams<T> {
     message: string;
     data?: unknown;
   }) => void;
-
-  /**
-   * Optional guard: clamp JSON sent to Checker to avoid huge drafts.
-   * Default: 20_000 chars (enough for most structured artefacts).
-   */
   maxDraftCharsForReview?: number;
 }
 
@@ -121,6 +96,14 @@ export async function runMakerCheckerLoop<T>({
   let lastReview: CheckerReview | null = null;
   let feedbackBlock = "";
 
+  // --- MEMORY INJECTION ---
+  const globalMemory = loadGlobalMemory();
+  const lessonsText = globalMemory.lessonsLearned.length > 0 
+    ? `\n\n--- AGENCY PLAYBOOK (LEARN FROM PAST MISTAKES) ---\n${globalMemory.lessonsLearned.map(l => `- ${l}`).join("\n")}\nEnsure you do not repeat these past mistakes in your output.`
+    : "";
+  
+  const enrichedMakerSystem = makerSystem + lessonsText;
+
   for (let iteration = 1; iteration <= maxIterations; iteration++) {
     onEvent?.({
       type: "maker:start",
@@ -141,7 +124,7 @@ export async function runMakerCheckerLoop<T>({
       const res = await generateObject({
         model,
         schema,
-        system: makerSystem,
+        system: enrichedMakerSystem,
         prompt: makerPrompt,
       });
       draft = res.object;
@@ -238,6 +221,9 @@ export async function runMakerCheckerLoop<T>({
       message: "Checker rejected the draft",
       data: review.critiques,
     });
+
+    // --- MEMORY CAPTURE ---
+    review.critiques.forEach(c => addGlobalLesson(c));
 
     feedbackBlock = formatCritiques(review.critiques);
   }
