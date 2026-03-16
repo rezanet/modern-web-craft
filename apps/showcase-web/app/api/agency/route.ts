@@ -7,12 +7,13 @@ import {
   FunctionalScopeSchema,
   TechnicalSpecSchema,
   BrandIdentitySchema,
+  MarketingPlanSchema,
+  CopywritingSchema,
   loadProjectState,
   saveProjectState,
   ProjectState
 } from "@craft/agency-core";
 
-// Helper to easily grab the markdown brains
 function getAgentBrain(filename: string) {
   const filePath = path.resolve(process.cwd(), `../../skills/agents/${filename}`);
   return fs.readFileSync(filePath, "utf-8");
@@ -28,14 +29,11 @@ export async function POST(req: Request) {
 
     console.log(`\n🚀 AGENCY PIPELINE ACTIVATED FOR: ${projectId}`);
 
-    // Load state from memory
     let state: ProjectState = loadProjectState(projectId) || {
-      status: "idle", scope: null, tech: null, brand: null, design: null, marketing: null,
+      status: "idle", scope: null, tech: null, brand: null, design: null, marketing: null, copy: null
     };
 
-    // ==========================================
-    // PHASE 1: BUSINESS SCOPING (BA & PO)
-    // ==========================================
+    // PHASE 1: Scoping
     if (!state.scope) {
       console.log("-> Entering Phase 1: Scoping");
       const result = await runMakerCheckerLoop({
@@ -54,22 +52,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: "Functional Scope Approved.", data: state, trace: result.trace });
     }
 
-    // ==========================================
-    // PHASE 2: TECHNICAL ARCHITECTURE (CTO & VPE)
-    // ==========================================
+    // PHASE 2: Technical Architecture
     if (!state.tech) {
       console.log("-> Entering Phase 2: Technical Architecture");
-      // Notice how we feed the APPROVED scope into the CTO's prompt!
-      const taskPrompt = `CLIENT IDEA: ${prompt}\n\nAPPROVED FUNCTIONAL SCOPE:\n${JSON.stringify(state.scope, null, 2)}\n\nDraft the technical specifications to support this scope.`;
-
+      const taskPrompt = `CLIENT IDEA: ${prompt}\n\nAPPROVED SCOPE:\n${JSON.stringify(state.scope, null, 2)}\n\nDraft the technical specifications.`;
       const result = await runMakerCheckerLoop({
-        model: openai("gpt-4o"),
-        schema: TechnicalSpecSchema,
-        makerSystem: getAgentBrain("03-cto.md"),
-        checkerSystem: getAgentBrain("04-technical-reviewer.md"),
-        taskPrompt,
-        maxIterations: 3,
-        throwOnMaxIterations: true,
+        model: openai("gpt-4o"), schema: TechnicalSpecSchema, makerSystem: getAgentBrain("03-cto.md"), checkerSystem: getAgentBrain("04-technical-reviewer.md"), taskPrompt, maxIterations: 3, throwOnMaxIterations: true,
       });
 
       state.tech = result.output;
@@ -77,30 +65,47 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: "Technical Specs Approved.", data: state, trace: result.trace });
     }
 
-    // ==========================================
-    // PHASE 3: BRAND STRATEGY (Strategist & CD)
-    // ==========================================
+    // PHASE 3: Brand Strategy
     if (!state.brand) {
       console.log("-> Entering Phase 3: Brand Identity");
-      const taskPrompt = `CLIENT IDEA: ${prompt}\n\nAPPROVED FUNCTIONAL SCOPE:\n${JSON.stringify(state.scope, null, 2)}\n\nDraft the psychological brand identity for this audience.`;
-
+      const taskPrompt = `CLIENT IDEA: ${prompt}\n\nAPPROVED SCOPE:\n${JSON.stringify(state.scope, null, 2)}\n\nDraft the brand identity.`;
       const result = await runMakerCheckerLoop({
-        model: openai("gpt-4o"),
-        schema: BrandIdentitySchema,
-        makerSystem: getAgentBrain("05-brand-strategist.md"),
-        checkerSystem: getAgentBrain("06-creative-director.md"),
-        taskPrompt,
-        maxIterations: 3,
-        throwOnMaxIterations: true,
+        model: openai("gpt-4o"), schema: BrandIdentitySchema, makerSystem: getAgentBrain("05-brand-strategist.md"), checkerSystem: getAgentBrain("06-creative-director.md"), taskPrompt, maxIterations: 3, throwOnMaxIterations: true,
       });
 
       state.brand = result.output;
-      state.status = "branding"; // Move to branding phase
+      state.status = "branding";
       saveProjectState(projectId, state);
       return NextResponse.json({ success: true, message: "Brand Identity Approved.", data: state, trace: result.trace });
     }
 
-    // Pipeline caught up
+    // PHASE 4: Marketing Strategy
+    if (!state.marketing) {
+      console.log("-> Entering Phase 4: Marketing Strategy");
+      const taskPrompt = `APPROVED SCOPE:\n${JSON.stringify(state.scope, null, 2)}\n\nBRAND IDENTITY:\n${JSON.stringify(state.brand, null, 2)}\n\nDraft the marketing plan.`;
+      const result = await runMakerCheckerLoop({
+        model: openai("gpt-4o"), schema: MarketingPlanSchema, makerSystem: getAgentBrain("07-marketing-director.md"), checkerSystem: getAgentBrain("08-marketing-reviewer.md"), taskPrompt, maxIterations: 3, throwOnMaxIterations: true,
+      });
+
+      state.marketing = result.output;
+      state.status = "marketing";
+      saveProjectState(projectId, state);
+      return NextResponse.json({ success: true, message: "Marketing Plan Approved.", data: state, trace: result.trace });
+    }
+
+    // PHASE 5: Copywriting
+    if (!state.copy) {
+      console.log("-> Entering Phase 5: Copywriting");
+      const taskPrompt = `SCOPE:\n${JSON.stringify(state.scope, null, 2)}\n\nBRAND IDENTITY:\n${JSON.stringify(state.brand, null, 2)}\n\nMARKETING PLAN:\n${JSON.stringify(state.marketing, null, 2)}\n\nDraft the copy adhering strictly to the brand tone and avoiding forbidden words.`;
+      const result = await runMakerCheckerLoop({
+        model: openai("gpt-4o"), schema: CopywritingSchema, makerSystem: getAgentBrain("09-copywriter.md"), checkerSystem: getAgentBrain("10-copy-editor.md"), taskPrompt, maxIterations: 3, throwOnMaxIterations: true,
+      });
+
+      state.copy = result.output;
+      saveProjectState(projectId, state);
+      return NextResponse.json({ success: true, message: "Copywriting Approved.", data: state, trace: result.trace });
+    }
+
     return NextResponse.json({ success: true, data: state, message: "Project is fully up to date." });
 
   } catch (error: any) {
