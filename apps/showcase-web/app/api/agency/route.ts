@@ -49,16 +49,20 @@ export async function POST(req: Request) {
         makerSystem: baSystem,
         checkerSystem: poSystem,
         taskPrompt: prompt,
-        maxIterations: 3, 
+        maxIterations: 3,
+        throwOnMaxIterations: true, // STRICT GATING: Fail hard if not approved
       });
 
+      // Because of throwOnMaxIterations, if we reach this line, result.approved is guaranteed true.
       // Update the state with the finalized, approved scope
-      state.scope = result;
+      state.scope = result.output;
       state.status = "branding"; // Successfully move the project to the next department!
       saveProjectState(projectId, state);
 
       console.log(`🏁 Scoping Complete. Project [${projectId}] saved to memory.`);
-      return NextResponse.json({ success: true, data: state });
+      
+      // We return the trace as well so the frontend portal can visualize the agent conversation!
+      return NextResponse.json({ success: true, data: state, trace: result.trace });
     }
 
     // If the project is past the scoping phase, we return the state as-is for now
